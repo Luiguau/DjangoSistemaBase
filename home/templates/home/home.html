@@ -1,0 +1,60 @@
+{% extends "login/home.html" %}
+{% block title %}Home{% endblock %}
+
+{% block nav %} Hello, {{active_user.nombre}}{% endblock %}
+
+{% block body %}
+	<div>
+		<span> Here are you appointments.</span> &nbsp;&nbsp;&nbsp;
+		<a href="/add_appointment">Add new appointment</a>
+	</div>
+	<table class="table" id="data">
+		<thead>
+		<tr>
+			<th scope="col">Task</th>
+			<th scope="col">Date</th>
+			<th scope="col">Status</th>
+			<th scope="col">Action</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for cita in lista_citas %}
+		<tr>
+			<td>{{cita.tarea}}</td>
+			<td>{{cita.fecha}}</td>
+			<td>{{cita.estado.estado}}</td>
+			<td>
+				{% if cita.estado.estado == "Pending" %}
+					<form action="action" method="POST">
+						{% csrf_token %}
+						<button type="submit" class="btn btn-sm btn-outline-primary d-inline" name="{{cita.id}}/edit">Edit</button>
+						&nbsp;|&nbsp;
+						<button type="submit" class="btn btn-sm btn-outline-danger d-inline" name="{{cita.id}}/del">Delete</button>
+					</form>
+				{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	<hr><br>
+	<h6>Past appointments</h6>
+	<table class="table" id="data-past">
+		<thead>
+		<tr>
+			<th scope="col">Task</th>
+			<th scope="col">Date</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for cita in lista_citas_pasadas %}
+		<tr>
+			<td>{{cita.tarea}}</td>
+			<td>{{cita.fecha}}</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+
+{% endblock %}
